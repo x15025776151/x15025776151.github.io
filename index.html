@@ -152,19 +152,173 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-我的第一篇博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-动手深度学习第一次总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/13/我的第一篇博客/">算法</a>
+      <a class="article-title" href="/2020/02/14/动手深度学习第一次总结/">动手深度学习第一次总结</a>
     </h1>
   
 
         
-        <a href="/2019/08/13/我的第一篇博客/" class="archive-article-date">
+        <a href="/2020/02/14/动手深度学习第一次总结/" class="archive-article-date">
+  	<time datetime="2020-02-14T09:01:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">squared_loss</span><span class="params">(y_hat, y)</span>:</span> </span><br><span class="line">    <span class="keyword">return</span> (y_hat - y.view(y_hat.size())) ** <span class="number">2</span> / <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>遇到这个函数后，不太懂什么时候会使用广播机制广播机制，上网查阅了一下。</p>
+<h2 id="广播机制的触发条件"><a href="#广播机制的触发条件" class="headerlink" title="广播机制的触发条件"></a>广播机制的触发条件</h2><p>如果以下规则成立，则两个张量是”可广播的”</p>
+<ol>
+<li>每个张量具有至少一个维度。</li>
+<li>遍历所有的维度，从尾部维度开始，每个对应的维度大小要么相同，要么其中一个是 1，要么其中一个不存在</li>
+</ol>
+<h3 id="eg"><a href="#eg" class="headerlink" title="eg:"></a>eg:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 按照尾部维度对齐</span><br><span class="line">x=torch.empty(5,3,4,1)</span><br><span class="line">y=torch.empty(  3,1,1)</span><br><span class="line"># x 和 y 是 broadcastable</span><br><span class="line"># 1st 尾部维度: 都为 1</span><br><span class="line"># 2nd 尾部维度: y 为 1</span><br><span class="line"># 3rd 尾部维度: x 和 y 相同</span><br><span class="line"># 4th 尾部维度: y 维度不存在</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 但是：</span><br><span class="line">&gt;&gt;&gt; x=torch.empty(5,2,4,1)</span><br><span class="line">&gt;&gt;&gt; y=torch.empty(  3,1,1)</span><br><span class="line"># x 和 y 不能 broadcasting, 因为尾3维度 2 != 3</span><br></pre></td></tr></table></figure>
+<h2 id="广播后的结果"><a href="#广播后的结果" class="headerlink" title="广播后的结果"></a>广播后的结果</h2><ol>
+<li>如果维数x和y不相等，在前面加上1用更少的尺寸张量的尺寸以使它们相等的长度。</li>
+<li>然后，对于每个维度大小，所得到的尺寸大小是根据x和y的最大维度。</li>
+</ol>
+<h1 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h1><h2 id="cross-entropy-包含了softmax函数"><a href="#cross-entropy-包含了softmax函数" class="headerlink" title="cross_entropy 包含了softmax函数"></a>cross_entropy 包含了softmax函数</h2><p>F.cross_entropy = softmax+log +nll_loss</p>
+<h1 id="文本预处理"><a href="#文本预处理" class="headerlink" title="文本预处理"></a>文本预处理</h1><h2 id="常见流程"><a href="#常见流程" class="headerlink" title="常见流程"></a>常见流程</h2><ol>
+<li>读入文本</li>
+<li>分词</li>
+<li>建立字典，将每个词映射到一个唯一的索（index）</li>
+<li>将文本从词的序列转换为索引的序列，方便输入模型</li>
+</ol>
+<h2 id="分词工具"><a href="#分词工具" class="headerlink" title="分词工具"></a>分词工具</h2><h3 id="spaCy-NTTK"><a href="#spaCy-NTTK" class="headerlink" title="spaCy,NTTK"></a>spaCy,NTTK</h3><h3 id="eg-1"><a href="#eg-1" class="headerlink" title="eg:"></a>eg:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">text = &quot;Mr. Chen doesn&apos;t agree with my suggestion.&quot;</span><br><span class="line"></span><br><span class="line">#spaCy</span><br><span class="line">import spacy</span><br><span class="line">nlp = spacy.load(&apos;en_core_web_sm&apos;)</span><br><span class="line">doc = nlp(text)</span><br><span class="line">print([token.text for token in doc])</span><br><span class="line"></span><br><span class="line">#NLTK</span><br><span class="line">from nltk.tokenize import word_tokenize</span><br><span class="line">from nltk import data</span><br><span class="line">data.path.append(&apos;/home/kesci/input/nltk_data3784/nltk_data&apos;)</span><br><span class="line">print(word_tokenize(text))</span><br></pre></td></tr></table></figure>
+<h3 id="result"><a href="#result" class="headerlink" title="result:"></a>result:</h3><p>[‘Mr.’, ‘Chen’, ‘does’, “n’t”, ‘agree’, ‘with’, ‘my’, ‘suggestion’, ‘.’]</p>
+<h1 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h1><h2 id="两种采样方法：-1-随机采样-2-相邻采样"><a href="#两种采样方法：-1-随机采样-2-相邻采样" class="headerlink" title="两种采样方法： 1.随机采样 2.相邻采样"></a>两种采样方法： 1.随机采样 2.相邻采样</h2><h1 id="循环神经网络"><a href="#循环神经网络" class="headerlink" title="循环神经网络"></a>循环神经网络</h1><h2 id="为什么在相邻采样时需要在每个批次使用detch？"><a href="#为什么在相邻采样时需要在每个批次使用detch？" class="headerlink" title="为什么在相邻采样时需要在每个批次使用detch？"></a>为什么在相邻采样时需要在每个批次使用detch？</h2><h3 id="detach-与-detach"><a href="#detach-与-detach" class="headerlink" title="detach() 与 detach_()"></a>detach() 与 detach_()</h3><p>&emsp;&emsp;从当前计算图中分离下来的，但是仍指向原变量的存放位置,不同之处只是requires_grad为false，得到的这个Variable永远不需要计算其梯度，不具有grad。</p>
+<p>&emsp;&emsp;即使之后重新将它的requires_grad置为true,它也不会具有梯度grad</p>
+<p>&emsp;&emsp;这样我们就会继续使用这个新的Variable进行计算，后面当我们进行反向传播时，到该调用detach()的Variable就会停止，不能再继续向前进行传播</p>
+<h3 id="个人思考：相邻采样时每个批次都是连续的数据，所以rnn出来的结果可以作为下一个批次的初始状态，但是如果此时不切断反向传播，将会计算之前的。"><a href="#个人思考：相邻采样时每个批次都是连续的数据，所以rnn出来的结果可以作为下一个批次的初始状态，但是如果此时不切断反向传播，将会计算之前的。" class="headerlink" title="个人思考：相邻采样时每个批次都是连续的数据，所以rnn出来的结果可以作为下一个批次的初始状态，但是如果此时不切断反向传播，将会计算之前的。"></a>个人思考：相邻采样时每个批次都是连续的数据，所以rnn出来的结果可以作为下一个批次的初始状态，但是如果此时不切断反向传播，将会计算之前的。</h3><h2 id="裁剪梯度"><a href="#裁剪梯度" class="headerlink" title="裁剪梯度"></a>裁剪梯度</h2><p>&emsp;&emsp;循环神经网络中较容易出现梯度衰减或梯度爆炸，这会导致网络几乎无法训练。裁剪梯度（clip gradient）是一种应对梯度爆炸的方法。假设我们把所有模型参数的梯度拼接成一个向量  𝑔 ，并设裁剪的阈值是 𝜃 。裁剪后的梯度</p>
+<p>$$\frac({𝜃}{‖𝑔‖},1) 𝑔$$</p>
+<p>的 𝐿2 范数不超过 𝜃 。防止梯度爆炸。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/14/动手深度学习第一次总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-二叉树" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/15/二叉树/">二叉树</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/15/二叉树/" class="archive-article-date">
+  	<time datetime="2019-08-15T03:21:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="二叉树的先序遍历"><a href="#二叉树的先序遍历" class="headerlink" title="二叉树的先序遍历"></a>二叉树的先序遍历</h2><h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归先序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PreorderTraversal</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!root) &#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;root-&gt;val&lt;&lt; <span class="string">" "</span>;</span><br><span class="line">        PreorderTraversal(root-&gt;left);</span><br><span class="line">        PreorderTraversal(root-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="非递归遍历"><a href="#非递归遍历" class="headerlink" title="非递归遍历"></a>非递归遍历</h3><p><img src="/img/1.jpg" alt="Alt Text"><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; preorderTraversal(TreeNode* root) &#123;</span><br><span class="line">    <span class="comment">// 用来暂存节点的栈</span></span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode* &gt; s;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ans;</span><br><span class="line">    TreeNode* node = root;</span><br><span class="line">    <span class="comment">// 当遍历到最后一个节点的时候，无论它的左右子树都为空，并且栈也为空</span></span><br><span class="line">    <span class="comment">// 所以，只要不同时满足这两点，都需要进入循环</span></span><br><span class="line">    <span class="keyword">while</span>(!s.empty() || node)&#123;</span><br><span class="line">        <span class="keyword">while</span>(node)&#123;</span><br><span class="line">            <span class="comment">// 为了之后能找到该节点的右子树，暂存该节点</span></span><br><span class="line">            s.push(node);</span><br><span class="line">            ans.push_back(node-&gt;val);</span><br><span class="line">            node = node-&gt;left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 一直到左子树为空，则开始考虑右子树</span></span><br><span class="line">        <span class="comment">// 如果栈已空，就不需要再考虑</span></span><br><span class="line">        <span class="comment">// 弹出栈顶元素，将游标等于该节点的右子树</span></span><br><span class="line">        <span class="keyword">if</span>(!s.empty())&#123;</span><br><span class="line">            node = s.top()-&gt;right;</span><br><span class="line">            s.pop();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="二叉树的中序遍历"><a href="#二叉树的中序遍历" class="headerlink" title="二叉树的中序遍历"></a>二叉树的中序遍历</h2><h3 id="非递归版"><a href="#非递归版" class="headerlink" title="非递归版"></a>非递归版</h3><p>与和非递归先序遍历类似，唯一区别是考查到当前节点时，并不直接输出该节点。而是当考查节点为空时，从栈中弹出的时候再进行输出(永远先考虑左子树，直到左子树为空才访问根节点)。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; preorderTraversal(TreeNode* root) &#123;</span><br><span class="line">    <span class="comment">// 用来暂存节点的栈</span></span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode* &gt; s;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ans;</span><br><span class="line">    TreeNode* node = root;</span><br><span class="line">    <span class="comment">// 当遍历到最后一个节点的时候，无论它的左右子树都为空，并且栈也为空</span></span><br><span class="line">    <span class="comment">// 所以，只要不同时满足这两点，都需要进入循环</span></span><br><span class="line">    <span class="keyword">while</span>(!s.empty() || node)&#123;</span><br><span class="line">        <span class="keyword">while</span>(node)&#123;</span><br><span class="line">            <span class="comment">// 为了之后能找到该节点的右子树，暂存该节点</span></span><br><span class="line">            s.push(node);</span><br><span class="line">            node = node-&gt;left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 一直到左子树为空，则开始考虑右子树</span></span><br><span class="line">        <span class="comment">// 如果栈已空，就不需要再考虑</span></span><br><span class="line">        <span class="comment">// 弹出栈顶元素，将游标等于该节点的右子树</span></span><br><span class="line">        <span class="keyword">if</span>(!s.empty())&#123;</span><br><span class="line">            ans.push_back(s.top()-&gt;val);</span><br><span class="line">            node = s.top()-&gt;right;</span><br><span class="line">            s.pop();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/15/二叉树/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-二分" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/13/二分/">算法</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/13/二分/" class="archive-article-date">
   	<time datetime="2019-08-13T07:32:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-13</time>
 </a>
         
@@ -206,7 +360,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/13/我的第一篇博客/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/08/13/二分/">展开全文 >></a>
         </p>
       
 
@@ -317,7 +471,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 xhy
+    		&copy; 2020 xhy
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
