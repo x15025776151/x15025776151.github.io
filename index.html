@@ -152,6 +152,76 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-动手深度学习第二次总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/18/动手深度学习第二次总结/">动手深度学习第二次总结</a>
+    </h1>
+  
+
+        
+        <a href="/2020/02/18/动手深度学习第二次总结/" class="archive-article-date">
+  	<time datetime="2020-02-18T11:51:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h1><p><img src="/img/gru.png" alt="gru"></p>
+<h1 id="seq2seq-attention"><a href="#seq2seq-attention" class="headerlink" title="seq2seq + attention"></a>seq2seq + attention</h1><p><img src="/img/seq2seq.png" alt="seq2seq"></p>
+<h1 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h1><h4 id="Transformer同样基于编码器-解码器架构，其区别主要在于以下三点："><a href="#Transformer同样基于编码器-解码器架构，其区别主要在于以下三点：" class="headerlink" title="Transformer同样基于编码器-解码器架构，其区别主要在于以下三点："></a>Transformer同样基于编码器-解码器架构，其区别主要在于以下三点：</h4><ol>
+<li>Transformer blocks：将seq2seq模型重的循环网络替换为了Transformer Blocks，该模块包含一个多头注意力层（Multi-head Attention Layers）以及两个position-wise feed-forward networks（FFN）。对于解码器来说，另一个多头注意力层被用于接受编码器的隐藏状态。</li>
+<li>Add and norm：多头注意力层和前馈网络的输出被送到两个“add and norm”层进行处理，该层包含残差结构以及层归一化。</li>
+<li>Position encoding：由于自注意力层并没有区分元素的顺序，所以一个位置编码层被用于向序列元素里添加位置信息。</li>
+</ol>
+<p><img src="/img/transfomer.png" alt="tansformer"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/02/18/动手深度学习第二次总结/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-动手深度学习第一次总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
