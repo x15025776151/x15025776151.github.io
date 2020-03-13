@@ -152,6 +152,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-位运算专题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/13/位运算专题/">位运算专题</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/13/位运算专题/" class="archive-article-date">
+  	<time datetime="2020-03-13T05:34:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="位运算专题"><a href="#位运算专题" class="headerlink" title="位运算专题"></a>位运算专题</h1><h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
+<li>x &amp; (-x) 等于x的二进制表示最右边的那个1，其余全是0的数，可以判断一个数是不是2的幂</li>
+<li><p>遍历num的所有位数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(num &gt;<span class="number">0</span>)&#123;</span><br><span class="line">    num &amp; <span class="number">1</span>;<span class="comment">//每一位的数值</span></span><br><span class="line">    num &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>^操作相当于 不进位的加法</p>
+</li>
+<li>第i位且之前全为1，后面全为0的做法。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~((<span class="number">1</span>&lt;&lt;i)-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。"><a href="#给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。" class="headerlink" title="给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。"></a>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现了三次。找出那个只出现了一次的元素。</h3><p><a href="https://leetcode-cn.com/problems/single-number-ii/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/single-number-ii/</a></p>
+<h4 id="思路：遍历32位，计算所有数中这一位的是1的个数，-3-1表示只出现一次那个数这一位为1。"><a href="#思路：遍历32位，计算所有数中这一位的是1的个数，-3-1表示只出现一次那个数这一位为1。" class="headerlink" title="思路：遍历32位，计算所有数中这一位的是1的个数，%3 == 1表示只出现一次那个数这一位为1。"></a>思路：遍历32位，计算所有数中这一位的是1的个数，%3 == 1表示只出现一次那个数这一位为1。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">32</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j &lt; nums.length;j++)&#123;</span><br><span class="line">                count += (nums[j]&gt;&gt;i) &amp; <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ans += (count%<span class="number">3</span>)&lt;&lt;i; </span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="给定一个整数数组-nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。-找出只出现一次的那两个元素。"><a href="#给定一个整数数组-nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。-找出只出现一次的那两个元素。" class="headerlink" title="给定一个整数数组 nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。 找出只出现一次的那两个元素。"></a>给定一个整数数组 nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。 找出只出现一次的那两个元素。</h2><p><a href="https://leetcode-cn.com/problems/single-number-iii/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/single-number-iii/</a></p>
+<h3 id="思路：先将数组中的每一个元素-得到的是这两个数的异或值，找出第k位为1的k-将数组分成两半。"><a href="#思路：先将数组中的每一个元素-得到的是这两个数的异或值，找出第k位为1的k-将数组分成两半。" class="headerlink" title="思路：先将数组中的每一个元素^,得到的是这两个数的异或值，找出第k位为1的k,将数组分成两半。"></a>思路：先将数组中的每一个元素^,得到的是这两个数的异或值，找出第k位为1的k,将数组分成两半。</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] singleNumber(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] ans = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> s = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> x: nums)</span><br><span class="line">            s ^= x;</span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> ((s&gt;&gt;k &amp; <span class="number">1</span>) != <span class="number">1</span>)</span><br><span class="line">            k++;</span><br><span class="line">        <span class="keyword">int</span> s1 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> x: nums)</span><br><span class="line">            <span class="keyword">if</span>((x&gt;&gt;k &amp; <span class="number">1</span>)  == <span class="number">1</span>)</span><br><span class="line">                s1 ^= x;</span><br><span class="line">        ans[<span class="number">0</span>] = s1;</span><br><span class="line">        ans[<span class="number">1</span>] = s^s1;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不使用运算符-和-​​​​​​​，计算两整数-​​​​​​​a-、b-​​​​​​​之和。"><a href="#不使用运算符-和-​​​​​​​，计算两整数-​​​​​​​a-、b-​​​​​​​之和。" class="headerlink" title="不使用运算符 + 和 - ​​​​​​​，计算两整数 ​​​​​​​a 、b ​​​​​​​之和。"></a>不使用运算符 + 和 - ​​​​​​​，计算两整数 ​​​​​​​a 、b ​​​​​​​之和。</h3><p><a href="https://leetcode-cn.com/problems/sum-of-two-integers/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/sum-of-two-integers/</a></p>
+<h4 id="思路，利用-运算是不进位加法的性质，再加上进位。"><a href="#思路，利用-运算是不进位加法的性质，再加上进位。" class="headerlink" title="思路，利用^运算是不进位加法的性质，再加上进位。"></a>思路，利用^运算是不进位加法的性质，再加上进位。</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSum</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> sum,carry;</span><br><span class="line">        <span class="keyword">if</span>(b==<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">        &#123;</span><br><span class="line">            sum=a^b;</span><br><span class="line">            carry=(a&amp;b)&lt;&lt;<span class="number">1</span>;</span><br><span class="line">          <span class="keyword">return</span>  getSum(sum,carry);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="给定范围-m-n-，其中-0-lt-m-lt-n-lt-2147483647，返回此范围内所有数字的按位与（包含-m-n-两端点）。"><a href="#给定范围-m-n-，其中-0-lt-m-lt-n-lt-2147483647，返回此范围内所有数字的按位与（包含-m-n-两端点）。" class="headerlink" title="给定范围 [m, n]，其中 0 &lt;= m &lt;= n &lt;= 2147483647，返回此范围内所有数字的按位与（包含 m, n 两端点）。"></a>给定范围 [m, n]，其中 0 &lt;= m &lt;= n &lt;= 2147483647，返回此范围内所有数字的按位与（包含 m, n 两端点）。</h3><p><a href="https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/bitwise-and-of-numbers-range/</a></p>
+<h3 id="思路，对于每一位，找到比m大且这一位为0的数字，如果大于n-则这一位是1"><a href="#思路，对于每一位，找到比m大且这一位为0的数字，如果大于n-则这一位是1" class="headerlink" title="思路，对于每一位，找到比m大且这一位为0的数字，如果大于n,则这一位是1."></a>思路，对于每一位，找到比m大且这一位为0的数字，如果大于n,则这一位是1.</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">rangeBitwiseAnd</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;(<span class="number">1L</span>&lt;&lt;i) &lt;= m;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>((m&gt;&gt;i &amp; <span class="number">1</span>) == <span class="number">1</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(((~((<span class="number">1</span>&lt;&lt;i)-<span class="number">1</span>) &amp; m) + (<span class="number">1L</span>&lt;&lt;i) ) &gt; n)</span><br><span class="line">                    ans += <span class="number">1</span>&lt;&lt;i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="汉明距离总和"><a href="#汉明距离总和" class="headerlink" title="汉明距离总和"></a>汉明距离总和</h3><p><a href="https://leetcode-cn.com/problems/total-hamming-distance/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/total-hamming-distance/</a></p>
+<h4 id="思路：汉明距离只与每位有关，某位1的个数为n，0的个数为m，则汉明距离加上n-m。"><a href="#思路：汉明距离只与每位有关，某位1的个数为n，0的个数为m，则汉明距离加上n-m。" class="headerlink" title="思路：汉明距离只与每位有关，某位1的个数为n，0的个数为m，则汉明距离加上n*m。"></a>思路：汉明距离只与每位有关，某位1的个数为n，0的个数为m，则汉明距离加上n*m。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">totalHammingDistance</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt;= <span class="number">30</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> ones = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> x: nums)&#123;</span><br><span class="line">                <span class="keyword">if</span>((x&gt;&gt;i &amp; <span class="number">1</span>) == <span class="number">1</span>)</span><br><span class="line">                    ones++;       </span><br><span class="line">            &#125;</span><br><span class="line">            ans += ones*(nums.length-ones);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>leetcode 421 (后面看)</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/13/位运算专题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-哈希表专题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
